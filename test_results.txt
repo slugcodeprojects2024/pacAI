@@ -1,0 +1,39 @@
+Test Results - 2025-02-27 19:05:37
+==================================================
+
+Layout: RANDOM1, myTeam as RED: WIN +6
+Layout: RANDOM1, myTeam as BLUE: LOSS -2
+
+Layout: RANDOM2, myTeam as RED: LOSS -6
+Layout: RANDOM2, myTeam as BLUE: LOSS -11
+
+Layout: RANDOM3, myTeam as RED: WIN +6
+Layout: RANDOM3, myTeam as BLUE: LOSS -11
+
+Layout: RANDOM4, myTeam as RED: WIN +1
+Layout: RANDOM4, myTeam as BLUE: LOSS -8
+
+Layout: RANDOM5, myTeam as RED: LOSS -6
+Layout: RANDOM5, myTeam as BLUE: WIN +1
+
+Layout: RANDOM6, myTeam as RED: WIN +6
+Layout: RANDOM6, myTeam as BLUE: LOSS -12
+
+Layout: RANDOM7, myTeam as RED: LOSS -3
+Layout: RANDOM7, myTeam as BLUE: LOSS -4
+
+Layout: RANDOM8, myTeam as RED: WIN +2
+Layout: RANDOM8, myTeam as BLUE: LOSS -1
+
+Layout: RANDOM9, myTeam as RED: WIN +3
+Layout: RANDOM9, myTeam as BLUE: LOSS -7
+
+Layout: RANDOM10, myTeam as RED: WIN +6
+Layout: RANDOM10, myTeam as BLUE: LOSS -1
+
+==================================================
+
+SUMMARY:
+Total games: 20
+Wins: 8
+Win rate: 40.00%
