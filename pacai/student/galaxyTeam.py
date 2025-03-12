@@ -54,7 +54,6 @@ class OffensiveAgent(CaptureAgent):
         # Randomly select from best_actions
         return random.choice(best_actions)
 
-
     def evalFcn(self, state, action):
         weights = self.score(state, action)
         features = self.featureGenerator(state, action)
@@ -78,20 +77,20 @@ class OffensiveAgent(CaptureAgent):
         # Encourages agent to prioritize closer food
         foodList = self.getFood(successor).asList()
         if foodList:
-            features['distanceToFood'] = min(self.getMazeDistance(myPos, food) for food in foodList)
+            features['distanceToFood'] = min(self.getMazeDistance(myPos, f) for f in foodList)
 
         # Distance to the Nearest Ghost (Guard)
         enemies = [successor.getAgentState(i) for i in self.getOpponents(successor)]
-        guards = [enemy for enemy in enemies if enemy.isGhost() and enemy.getPosition() is not None]
+        guards = [e for e in enemies if e.isGhost() and e.getPosition() is not None]
 
         guardDistances = [self.getMazeDistance(myPos, guard.getPosition()) for guard in guards]
         if guardDistances:
             features['guardDistance'] = min(guardDistances)
 
         # Distance to the Nearest Capsule
-        capsuleList = self.getCapsules(successor)
-        if capsuleList:
-            features['distanceToCapsule'] = min(self.getMazeDistance(myPos, capsule) for capsule in capsuleList)
+        cap_List = self.getCapsules(successor)
+        if cap_List:
+            features['distanceToCapsule'] = min(self.getMazeDistance(myPos, c) for c in cap_List)
 
         # Distance to the Nearest Ally
         allies = [successor.getAgentState(i) for i in self.getTeam(successor)]
@@ -100,7 +99,6 @@ class OffensiveAgent(CaptureAgent):
             features['allyDistance'] = min(allyDistances)
 
         return features
-
 
     def score(self, state, action):
         scores = {
@@ -126,9 +124,6 @@ class OffensiveAgent(CaptureAgent):
         else:
             return successor
 
-
-
-
 class DefensiveAgent(CaptureAgent):
     def __init__(self, index, **kwargs):
         super().__init__(index)
@@ -144,7 +139,7 @@ class DefensiveAgent(CaptureAgent):
 
         # Debugging
         start_time = time.time()
-        logging.debug(f'Evaluation time for agent {self.index}: {time.time() - start_time:.4f} seconds')
+        logging.debug(f'Eval time for agent {self.index}: {time.time() - start_time:.4f} seconds')
 
         # Get the maximum score
         max_value = max(action_values.values())
@@ -154,7 +149,6 @@ class DefensiveAgent(CaptureAgent):
 
         # Randomly select from best_actions
         return random.choice(best_actions)
-
 
     def evalFcn(self, state, action):
         weights = self.score(state, action)
@@ -168,39 +162,38 @@ class DefensiveAgent(CaptureAgent):
         myState = successor.getAgentState(self.index)
         myPos = myState.getPosition()
 
-        features = {}
+        fe = {}
 
         # Defense Status
         # Tracks if the agent is playing defense or offense
-        features['onDefense'] = 1 if not myState.isPacman() else 0
+        fe['onDefense'] = 1 if not myState.isPacman() else 0
 
         # Getting the number of Visible Invaders
         # Prioritize defending against visible enemy Pacman
-        enemies = [successor.getAgentState(i) for i in self.getOpponents(successor)]
-        invaders = [enemy for enemy in enemies if enemy.isPacman() and enemy.getPosition() is not None]
-        features['numInvaders'] = len(invaders)
+        enem = [successor.getAgentState(i) for i in self.getOpponents(successor)]
+        inv = [enemy for enemy in enem if enemy.isPacman() and enemy.getPosition() is not None]
+        fe['numInvaders'] = len(inv)
 
         # Distance to the Nearest Invader
         # Makes the agent to move closer to invaders to intercept
-        if invaders:
-            features['invaderDistance'] = min(self.getMazeDistance(myPos, invader.getPosition()) for invader in invaders)
+        if inv:
+            fe['invaderDistance'] = min(self.getMazeDistance(myPos, i.getPosition()) for i in inv)
 
         # Distance to the Nearest Enemy
         # Make agent aware of nearby opponents
-        if enemies:
-            features['enemyDistance'] = min(self.getMazeDistance(myPos, enemy.getPosition()) for enemy in enemies)
+        if enem:
+            fe['enemyDistance'] = min(self.getMazeDistance(myPos, e.getPosition()) for e in enem)
 
         # Penalty for Stopping
         if action == Directions.STOP:
-            features['stop'] = 1
+            fe['stop'] = 1
 
         # Penalty for Reversing, unless needed
         current_direction = state.getAgentState(self.index).getDirection()
         if action == Directions.REVERSE[current_direction]:
-            features['reverse'] = 1
+            fe['reverse'] = 1
 
-        return features
-
+        return fe
 
     def score(self, state, action):
         scores = {
@@ -213,8 +206,6 @@ class DefensiveAgent(CaptureAgent):
         }
         logging.debug(f"Score Calculation for {action}: {scores}")
         return scores
-
-
 
     def getSuccessor(self, gameState, action):
        
