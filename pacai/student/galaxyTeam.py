@@ -115,18 +115,17 @@ class OffensiveAgent(CaptureAgent):
         logging.debug(f"Score Calculation for {action}: {scores}")
         return scores
 
-
-
-
-
     def getSuccessor(self, gameState, action):
        
-        # If the position is not matching with the nearest grid point, generate an additional successor
         successor = gameState.generateSuccessor(self.index, action)
         newPos = successor.getAgentState(self.index).getPosition()
 
         # Makes sure the agent is on a valid grid point before returning the state
-        return successor.generateSuccessor(self.index, action) if newPos != util.nearestPoint(newPos) else successor
+        if newPos != util.nearestPoint(newPos):
+            return successor.generateSuccessor(self.index, action)
+        else:
+            return successor
+
 
 
 
@@ -207,7 +206,7 @@ class DefensiveAgent(CaptureAgent):
         scores = {
             'numInvaders': -800,    # Still a high priority, but less aggressive
             'onDefense': 100,       # Encourage defensive positioning
-            'invaderDistance': -100, # Balanced priority for interception
+            'invaderDistance': -100,  # Balanced priority for interception
             'stop': -10,            # Stronger penalty for inactivity
             'reverse': -5,          # Mild penalty to prevent excessive reversing
             'enemyDistance': -30    # More emphasis on enemy tracking
@@ -219,12 +218,11 @@ class DefensiveAgent(CaptureAgent):
 
     def getSuccessor(self, gameState, action):
        
-        # If the position is not matching with the nearest grid point, generate an additional successor
         successor = gameState.generateSuccessor(self.index, action)
         newPos = successor.getAgentState(self.index).getPosition()
 
         # Makes sure the agent is on a valid grid point before returning the state
-        return successor.generateSuccessor(self.index, action) if newPos != util.nearestPoint(newPos) else successor
-
-
-
+        if newPos != util.nearestPoint(newPos):
+            return successor.generateSuccessor(self.index, action)
+        else:
+            return successor
